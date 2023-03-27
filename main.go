@@ -39,7 +39,7 @@ func startCacheServer(addr string, addrs []string, gee *cache.Group) {
 	peers := network.NewHTTPPool(addr)
 	peers.Set(addrs...)
 	gee.RegisterPeers(peers)
-	log.Println("geecache is running at", addr)
+	log.Println("gocache is running at", addr)
 	log.Fatal(http.ListenAndServe(addr[7:], peers))
 }
 
