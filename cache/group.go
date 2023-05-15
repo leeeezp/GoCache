@@ -69,9 +69,9 @@ func (g *Group) Get(key string) (ByteView, error) {
 	if key == "" {
 		return ByteView{}, fmt.Errorf("key is required")
 	}
-
+	// 先扫描当前cache中是否有cache
 	if v, ok := g.mainCache.get(key); ok {
-		log.Println("[GeeCache] hit")
+		log.Println("[GoCache] hit")
 		return v, nil
 	}
 

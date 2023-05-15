@@ -3,7 +3,7 @@ package network
 import (
 	"fmt"
 	pb "gocache/pb"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/url"
 
@@ -31,7 +31,7 @@ func (h *httpGetter) Get(in *pb.Request, out *pb.Response) error {
 		return fmt.Errorf("server returned: %v", res.Status)
 	}
 
-	bytes, err := ioutil.ReadAll(res.Body)
+	bytes, err := io.ReadAll(res.Body)
 	if err != nil {
 		return fmt.Errorf("reading response body: %v", err)
 	}
