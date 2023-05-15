@@ -12,7 +12,7 @@ type Hash func(data []byte) uint32
 // Map constains all hashed keys
 type Map struct {
 	hash     Hash
-	replicas int
+	replicas int   // 一个主机节点对应一致性哈希上的节点数量
 	keys     []int // Sorted
 	hashMap  map[int]string
 }

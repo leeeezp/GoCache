@@ -14,8 +14,8 @@ import (
 	"log"
 	"net/http"
 
-	"gocache/cache"
-	"gocache/network"
+	"gocache/datastruct"
+	"gocache/peer"
 )
 
 var db = map[string]string{
@@ -24,8 +24,8 @@ var db = map[string]string{
 	"Sam":  "567",
 }
 
-func createGroup() *cache.Group {
-	return cache.NewGroup("scores", 2<<10, cache.GetterFunc(
+func createGroup() *datastruct.Group {
+	return datastruct.NewGroup("scores", 2<<10, datastruct.GetterFunc(
 		func(key string) ([]byte, error) {
 			log.Println("[SlowDB] search key", key)
 			if v, ok := db[key]; ok {
@@ -35,15 +35,15 @@ func createGroup() *cache.Group {
 		}))
 }
 
-func startCacheServer(addr string, addrs []string, gee *cache.Group) {
-	peers := network.NewHTTPPool(addr)
+func startCacheServer(addr string, addrs []string, gee *datastruct.Group) {
+	peers := peer.NewHTTPPool(addr)
 	peers.Set(addrs...)
 	gee.RegisterPeers(peers)
 	log.Println("gocache is running at", addr)
 	log.Fatal(http.ListenAndServe(addr[7:], peers))
 }
 
-func startAPIServer(apiAddr string, gee *cache.Group) {
+func startAPIServer(apiAddr string, gee *datastruct.Group) {
 	http.Handle("/api", http.HandlerFunc(
 		func(w http.ResponseWriter, r *http.Request) {
 			key := r.URL.Query().Get("key")
